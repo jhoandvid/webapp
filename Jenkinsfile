@@ -6,14 +6,14 @@ pipeline {
   }
 
   environment {
-    ARTIFACT_ID = "jhoandvid/webapp"
+    ARTIFACT_ID = "jhoandvid/webapp:${env.BUILD_NUMBER}"
   }
 
   stages {
     stage('Build') {
       steps {
         script {
-          dir("webapp") {
+          dir("") {
             dockerImage = docker.build "${env.ARTIFACT_ID}"
           }
         }
@@ -26,7 +26,7 @@ pipeline {
     }
     stage('Publish') {
       when {
-        branch 'master'
+        branch 'main'
       }
       steps {
         script {
@@ -38,12 +38,11 @@ pipeline {
     }
     stage('Schedule Staging Deployment') {
       when {
-        branch 'master'
+        branch 'main'
       }
       steps {
-        build job: 'deploy-webapp-staging', parameters: [string(name: 'ARTIFACT_ID', value: "${env.ARTIFACT_ID}")], wait: false
+        build job: 'deploy-webapp-staging', parameters: [string(name: 'ARTIFACT_ID', value: "${env.ARTIFACT_ID}")], wait: true
       }
     }
   }
 }
-
