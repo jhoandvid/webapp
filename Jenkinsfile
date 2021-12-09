@@ -6,7 +6,7 @@ pipeline {
   }
 
   environment {
-    ARTIFACT_ID = "jhoandvid/webapp:Dockerfile"
+    ARTIFACT_ID = "jhoandvid/webapp"
   }
 
   stages {
